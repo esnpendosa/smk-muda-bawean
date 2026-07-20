@@ -12,12 +12,24 @@ class CacheService
     public function remember(string $key, int $ttl, callable $callback): mixed
     {
         try {
-            return Cache::remember($key, $ttl, $callback);
+            $value = Cache::get($key);
+            if ($value !== null && !$this->hasIncompleteClass($value)) {
+                return $value;
+            }
+            if ($value !== null) {
+                Cache::forget($key);
+            }
         } catch (\Throwable) {
-            // Cache entry is corrupt (e.g., stale serialized objects after migration)
             Cache::forget($key);
-            return $callback();
         }
+
+        $fresh = $callback();
+        try {
+            Cache::put($key, $fresh, $ttl);
+        } catch (\Throwable $e) {
+            report($e);
+        }
+        return $fresh;
     }
 
     /**
@@ -30,8 +42,12 @@ class CacheService
 
         // If fresh cache exists, return it (guard against corrupt deserialization)
         try {
-            if (($value = Cache::get($key)) !== null) {
+            $value = Cache::get($key);
+            if ($value !== null && !$this->hasIncompleteClass($value)) {
                 return $value;
+            }
+            if ($value !== null) {
+                Cache::forget($key);
             }
         } catch (\Throwable) {
             Cache::forget($key);
@@ -39,7 +55,8 @@ class CacheService
 
         // If fresh is expired but stale exists
         try {
-            if (($staleValue = Cache::get($staleKey)) !== null) {
+            $staleValue = Cache::get($staleKey);
+            if ($staleValue !== null && !$this->hasIncompleteClass($staleValue)) {
                 // Regenerate in the background after sending response
                 dispatch(function () use ($key, $staleKey, $ttl, $gracePeriod, $callback) {
                     $fresh = $callback();
@@ -48,6 +65,9 @@ class CacheService
                 })->afterResponse();
 
                 return $staleValue;
+            }
+            if ($staleValue !== null) {
+                Cache::forget($staleKey);
             }
         } catch (\Throwable) {
             Cache::forget($staleKey);
@@ -64,6 +84,32 @@ class CacheService
             report($e);
             return $callback();
         }
+    }
+
+    /**
+     * Check recursively if the value contains __PHP_Incomplete_Class.
+     */
+    protected function hasIncompleteClass(mixed $value): bool
+    {
+        if ($value instanceof \__PHP_Incomplete_Class) {
+            return true;
+        }
+
+        if (is_array($value)) {
+            foreach ($value as $item) {
+                if ($this->hasIncompleteClass($item)) {
+                    return true;
+                }
+            }
+        } elseif (is_object($value)) {
+            foreach ((array) $value as $item) {
+                if ($this->hasIncompleteClass($item)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     /**

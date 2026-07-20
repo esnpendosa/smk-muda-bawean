@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\PostController;
+use App\Http\Controllers\Admin\CommentController;
 use App\Http\Controllers\Admin\AnnouncementController;
 use App\Http\Controllers\Admin\GraduationController;
 use App\Http\Controllers\Admin\AlumniController;
@@ -30,6 +31,9 @@ Route::name('admin.')->group(function () {
 
         // Berita
         Route::resource('posts', PostController::class);
+
+        // Komentar
+        Route::resource('comments', CommentController::class)->only(['index', 'update', 'destroy']);
 
         // Pengumuman
         Route::resource('announcements', AnnouncementController::class);
@@ -67,6 +71,8 @@ Route::name('admin.')->group(function () {
             Route::post('settings/seo',    [SettingController::class, 'updateSeo'])->name('settings.seo.update');
             Route::get('settings/theme',   [SettingController::class, 'theme'])->name('settings.theme');
             Route::post('settings/theme',  [SettingController::class, 'updateTheme'])->name('settings.theme.update');
+            Route::get('settings/slider',  [SettingController::class, 'slider'])->name('settings.slider');
+            Route::post('settings/slider', [SettingController::class, 'updateSlider'])->name('settings.slider.update');
         });
     });
 });

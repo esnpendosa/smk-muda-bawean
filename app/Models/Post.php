@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Post extends Model
 {
@@ -29,6 +30,14 @@ class Post extends Model
     ];
 
     /**
+     * Get the comments for the post.
+     */
+    public function comments(): HasMany
+    {
+        return $this->hasMany(Comment::class)->where('status', 'approved')->whereNull('parent_id')->orderBy('created_at', 'desc');
+    }
+
+    /**
      * Scope to only include published posts.
      */
     public function scopePublished(Builder $query): Builder
@@ -44,5 +53,20 @@ class Post extends Model
     public function author(): BelongsTo
     {
         return $this->belongsTo(User::class, 'author_id');
+    }
+
+    /**
+     * Get the publicly accessible thumbnail URL.
+     * Handles both storage-based uploads and public/images/ assets.
+     */
+    public function getThumbnailUrlAttribute(): ?string
+    {
+        if (!$this->thumbnail) return null;
+        // Already a full URL
+        if (str_starts_with($this->thumbnail, 'http')) return $this->thumbnail;
+        // Public images (images/xxx.png) — served directly from public/
+        if (str_starts_with($this->thumbnail, 'images/')) return asset($this->thumbnail);
+        // Storage uploads (uploads/xxx.png)
+        return asset('storage/' . $this->thumbnail);
     }
 }

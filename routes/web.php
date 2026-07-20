@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Public\HomeController;
 use App\Http\Controllers\Public\NewsController;
+use App\Http\Controllers\Public\CommentController;
 use App\Http\Controllers\Public\AnnouncementController;
 use App\Http\Controllers\Public\GraduationController;
 use App\Http\Controllers\Public\AlumniController;
@@ -15,9 +16,13 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 
 // Berita
 Route::prefix('berita')->name('berita.')->group(function () {
-    Route::get('/',        [NewsController::class, 'index'])->name('index');
-    Route::get('/{slug}',  [NewsController::class, 'show'])->name('show');
+    Route::get('/',                 [NewsController::class, 'index'])->name('index');
+    Route::get('/{slug}',           [NewsController::class, 'show'])->name('show');
+    Route::post('/{slug}/comments', [CommentController::class, 'store'])->name('comments.store');
 });
+
+// Comment Upvote
+Route::post('/comments/{id}/upvote', [CommentController::class, 'upvote'])->name('comments.upvote');
 
 // Pengumuman
 Route::prefix('pengumuman')->name('pengumuman.')->group(function () {

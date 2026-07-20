@@ -3,10 +3,11 @@
 @section('content')
 <div class="max-w-2xl space-y-8">
     <h1 class="text-2xl font-bold text-white">Pengaturan SEO</h1>
-    <div class="flex gap-3 border-b border-slate-800 pb-4">
+    <div class="flex flex-wrap gap-2 border-b border-slate-800 pb-4">
         <a href="{{ route('admin.settings.index') }}" class="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white text-sm font-bold rounded-lg transition">Info Sekolah</a>
         <a href="{{ route('admin.settings.seo') }}" class="px-4 py-2 bg-blue-600 text-white text-sm font-bold rounded-lg">SEO</a>
         <a href="{{ route('admin.settings.theme') }}" class="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white text-sm font-bold rounded-lg transition">Tema Warna</a>
+        <a href="{{ route('admin.settings.slider') }}" class="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white text-sm font-bold rounded-lg transition">Hero Slider</a>
     </div>
     <form action="{{ route('admin.settings.seo.update') }}" method="POST" class="bg-slate-900 border border-slate-800 rounded-2xl p-8 space-y-5">
         @csrf

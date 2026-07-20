@@ -59,4 +59,49 @@ class SettingController extends Controller
 
         return redirect()->route('admin.settings.theme')->with('success', 'Tema berhasil disimpan.');
     }
+
+    public function slider()
+    {
+        $settings = Setting::all()->pluck('value', 'key')->toArray();
+        return view('admin.settings.slider', compact('settings'));
+    }
+
+    public function updateSlider(Request $request)
+    {
+        $request->validate([
+            'slider_slide1_bg' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:3072',
+            'slider_slide2_bg' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:3072',
+            'slider_slide3_bg' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:3072',
+        ]);
+
+        $fields = [
+            'slider_slide1_title', 'slider_slide1_highlight', 'slider_slide1_desc', 'slider_slide1_btn1_text', 'slider_slide1_btn1_link', 'slider_slide1_btn2_text', 'slider_slide1_btn2_link',
+            'slider_slide2_title', 'slider_slide2_highlight', 'slider_slide2_desc', 'slider_slide2_btn1_text', 'slider_slide2_btn1_link', 'slider_slide2_btn2_text', 'slider_slide2_btn2_link',
+            'slider_slide3_title', 'slider_slide3_highlight', 'slider_slide3_desc', 'slider_slide3_btn1_text', 'slider_slide3_btn1_link', 'slider_slide3_btn2_text', 'slider_slide3_btn2_link',
+        ];
+
+        foreach ($fields as $field) {
+            Setting::set($field, $request->input($field, ''));
+        }
+
+        // Handle file uploads for background images
+        for ($i = 1; $i <= 3; $i++) {
+            $key = "slider_slide{$i}_bg";
+            if ($request->hasFile($key)) {
+                // Delete old image if it exists
+                $oldPath = Setting::get($key);
+                if ($oldPath && \Illuminate\Support\Facades\Storage::disk('public')->exists($oldPath)) {
+                    \Illuminate\Support\Facades\Storage::disk('public')->delete($oldPath);
+                }
+
+                $ext = $request->file($key)->getClientOriginalExtension();
+                $path = $request->file($key)->storeAs(
+                    'uploads', \Illuminate\Support\Str::uuid() . '.' . $ext, 'public'
+                );
+                Setting::set($key, $path);
+            }
+        }
+
+        return redirect()->route('admin.settings.slider')->with('success', 'Hero Slider berhasil disimpan.');
+    }
 }
