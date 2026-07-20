@@ -57,9 +57,17 @@
             <div class="flex items-center justify-between h-20">
                 <!-- Branding -->
                 <div class="flex-shrink-0">
-                    <a href="{{ route('home') }}" class="flex items-center gap-2">
-                        <span class="text-2xl font-black tracking-tight text-white">
-                            SMK <span class="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">MUDA</span> BAWEAN
+                    <a href="{{ route('home') }}" class="flex items-center gap-2.5" aria-label="SMK Muda Bawean - Halaman Utama">
+                        <picture>
+                            <source srcset="{{ asset('images/logo-smk.png') }}" type="image/png">
+                            <img src="{{ asset('images/logo-smk.svg') }}"
+                                 alt="Logo SMK Muhammadiyah 4 Sangkapura Bawean"
+                                 class="h-12 w-12 object-contain"
+                                 loading="eager">
+                        </picture>
+                        <span class="text-xl font-black tracking-tight text-white leading-tight">
+                            SMK <span class="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">MUDA</span><br>
+                            <span class="text-xs font-semibold text-slate-400 tracking-wide">Muhammadiyah 4 Sangkapura</span>
                         </span>
                     </a>
                 </div>
@@ -149,8 +157,14 @@
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
                 <!-- About -->
                 <div class="space-y-4">
-                    <span class="text-xl font-extrabold text-white">SMK Muda Bawean</span>
-                    <p class="text-sm text-slate-400">Menghasilkan lulusan yang cerdas, kompetitif, berkarakter mulia, serta siap bersaing secara global.</p>
+                    <div class="flex items-center gap-3">
+                        <picture>
+                            <source srcset="{{ asset('images/logo-smk.png') }}" type="image/png">
+                            <img src="{{ asset('images/logo-smk.svg') }}" alt="Logo SMK MUDA" class="h-14 w-14 object-contain" loading="lazy">
+                        </picture>
+                        <span class="text-lg font-extrabold text-white leading-tight">SMK MUDA<br><span class="text-xs font-normal text-slate-400">Muhammadiyah 4 Sangkapura</span></span>
+                    </div>
+                    <p class="text-sm text-slate-400">Menjadikan sekolah yang Mandiri, Unggul, Disiplin, dan Agamis.</p>
                 </div>
                 
                 <!-- Quick links -->
@@ -177,8 +191,15 @@
                 <!-- Contact -->
                 <div class="space-y-4">
                     <h3 class="text-sm font-bold text-white uppercase tracking-wider">Hubungi Kami</h3>
-                    <p class="text-sm text-slate-400">Jl. Daendels No. 1, Sangkapura, Bawean</p>
-                    <p class="text-sm text-slate-400">Email: info@smkmudabawean.sch.id</p>
+                    <ul class="space-y-1.5 text-sm text-slate-400">
+                        <li>📍 JL. KH. Ahmad Dahlan No. 01, Daun, Sangkapura, Bawean</li>
+                        <li>📞 +62 853-3324-5454</li>
+                        <li>✉️ smkmuda4bawean@gmail.com</li>
+                        <li class="flex gap-3 pt-1">
+                            <a href="https://www.facebook.com/profile.php?id=100086197102754" target="_blank" rel="noopener" class="hover:text-primary transition">Facebook</a>
+                            <a href="https://www.instagram.com/smkmudabawean" target="_blank" rel="noopener" class="hover:text-primary transition">Instagram</a>
+                        </li>
+                    </ul>
                 </div>
             </div>
             
