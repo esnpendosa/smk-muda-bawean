@@ -11,7 +11,13 @@ class CacheService
      */
     public function remember(string $key, int $ttl, callable $callback): mixed
     {
-        return Cache::remember($key, $ttl, $callback);
+        try {
+            return Cache::remember($key, $ttl, $callback);
+        } catch (\Throwable) {
+            // Cache entry is corrupt (e.g., stale serialized objects after migration)
+            Cache::forget($key);
+            return $callback();
+        }
     }
 
     /**
@@ -22,24 +28,32 @@ class CacheService
         $staleKey    = "stale_{$key}";
         $gracePeriod = 300;
 
-        // If fresh cache exists, return it
-        if (($value = Cache::get($key)) !== null) {
-            return $value;
+        // If fresh cache exists, return it (guard against corrupt deserialization)
+        try {
+            if (($value = Cache::get($key)) !== null) {
+                return $value;
+            }
+        } catch (\Throwable) {
+            Cache::forget($key);
         }
 
         // If fresh is expired but stale exists
-        if (($staleValue = Cache::get($staleKey)) !== null) {
-            // Regenerate in the background after sending response
-            dispatch(function () use ($key, $staleKey, $ttl, $gracePeriod, $callback) {
-                $fresh = $callback();
-                Cache::put($key, $fresh, $ttl);
-                Cache::put($staleKey, $fresh, $ttl + $gracePeriod);
-            })->afterResponse();
+        try {
+            if (($staleValue = Cache::get($staleKey)) !== null) {
+                // Regenerate in the background after sending response
+                dispatch(function () use ($key, $staleKey, $ttl, $gracePeriod, $callback) {
+                    $fresh = $callback();
+                    Cache::put($key, $fresh, $ttl);
+                    Cache::put($staleKey, $fresh, $ttl + $gracePeriod);
+                })->afterResponse();
 
-            return $staleValue;
+                return $staleValue;
+            }
+        } catch (\Throwable) {
+            Cache::forget($staleKey);
         }
 
-        // Both expired or not existing: execute synchronously
+        // Both expired/corrupt/missing: execute synchronously
         try {
             $fresh = $callback();
             Cache::put($key, $fresh, $ttl);
