@@ -20,11 +20,11 @@
             <div class="bg-gray-50 border border-gray-150 rounded-xl p-6 space-y-4">
                 <div class="flex justify-between border-b border-gray-200 pb-3">
                     <span class="text-gray-500 text-sm">Nama Lengkap</span>
-                    <span class="text-gray-900 font-bold text-sm text-right">{{ $graduation->nama }}</span>
+                    <span class="text-gray-900 font-bold text-sm text-right">{{ $graduation->student_name }}</span>
                 </div>
                 <div class="flex justify-between border-b border-gray-200 pb-3">
                     <span class="text-gray-500 text-sm">NISN Siswa</span>
-                    <span class="text-gray-900 font-mono text-sm text-right">{{ $graduation->nisn }}</span>
+                    <span class="text-gray-900 font-mono text-sm text-right">{{ $graduation->exam_number }}</span>
                 </div>
                 <div class="flex justify-between border-b border-gray-200 pb-3">
                     <span class="text-gray-500 text-sm">Program Keahlian</span>
@@ -47,7 +47,7 @@
             <!-- Action Buttons -->
             <div class="space-y-3 pt-4">
                 @if(strtoupper($graduation->status_kelulusan) === 'LULUS')
-                    <a href="{{ route('kelulusan.download', $graduation->exam_number) }}" class="w-full inline-flex items-center justify-center gap-2 py-4 bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl transition duration-150 shadow-sm">
+                    <a href="{{ route('kelulusan.download', ['nisn' => $graduation->exam_number]) }}" class="w-full inline-flex items-center justify-center gap-2 py-4 bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl transition duration-150 shadow-sm">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                         Unduh Surat Kelulusan (PDF)
                     </a>

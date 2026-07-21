@@ -33,7 +33,7 @@ class TeacherController extends Controller
         $photoPath = null;
         if ($request->hasFile('photo')) {
             $ext = $request->file('photo')->getClientOriginalExtension();
-            $photoPath = $request->file('photo')->storeAs('uploads', Str::uuid() . '.' . $ext, 'private');
+            $photoPath = $request->file('photo')->storeAs('uploads', Str::uuid() . '.' . $ext, 'public');
         }
 
         Teacher::create([
@@ -69,9 +69,9 @@ class TeacherController extends Controller
         ]);
 
         if ($request->hasFile('photo')) {
-            if ($teacher->photo) Storage::disk('private')->delete($teacher->photo);
+            if ($teacher->photo) Storage::disk('public')->delete($teacher->photo);
             $ext = $request->file('photo')->getClientOriginalExtension();
-            $validated['photo'] = $request->file('photo')->storeAs('uploads', Str::uuid() . '.' . $ext, 'private');
+            $validated['photo'] = $request->file('photo')->storeAs('uploads', Str::uuid() . '.' . $ext, 'public');
         }
 
         $teacher->update([
@@ -87,7 +87,7 @@ class TeacherController extends Controller
     public function destroy($id)
     {
         $teacher = Teacher::findOrFail($id);
-        if ($teacher->photo) Storage::disk('private')->delete($teacher->photo);
+        if ($teacher->photo) Storage::disk('public')->delete($teacher->photo);
         $teacher->delete();
 
         return redirect()->route('admin.teachers.index')->with('success', 'Data pendidik berhasil dihapus.');

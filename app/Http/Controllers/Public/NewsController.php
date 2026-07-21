@@ -21,7 +21,7 @@ class NewsController extends Controller
      */
     public function index()
     {
-        $posts = Post::published()->with('author')->orderBy('published_at', 'desc')->paginate(10);
+        $posts = Post::published()->with('author')->orderBy('published_at', 'desc')->paginate(9);
         
         $seo = [
             'title' => 'Kabar & Berita',

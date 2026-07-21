@@ -46,7 +46,7 @@ class PostCrudTest extends TestCase
 
     public function test_post_store_rejects_invalid_thumbnail_type(): void
     {
-        Storage::fake('private');
+        Storage::fake('public');
         $admin = $this->admin();
         $file  = UploadedFile::fake()->create('malware.exe', 100);
 
@@ -57,6 +57,18 @@ class PostCrudTest extends TestCase
             'thumbnail' => $file,
         ]);
         $response->assertSessionHasErrors(['thumbnail']);
+    }
+
+    public function test_post_index_search_filters_results(): void
+    {
+        $admin = $this->admin();
+        $post1 = Post::factory()->create(['title' => 'Unik Headline Satu', 'author_id' => $admin->id]);
+        $post2 = Post::factory()->create(['title' => 'Headline Biasa Aja', 'author_id' => $admin->id]);
+
+        $response = $this->actingAs($admin)->get('/admin/posts?search=Unik');
+        $response->assertStatus(200);
+        $response->assertSee('Unik Headline Satu');
+        $response->assertDontSee('Headline Biasa Aja');
     }
 
     public function test_post_update_preserves_slug_when_title_unchanged(): void

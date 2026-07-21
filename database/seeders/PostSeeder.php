@@ -29,7 +29,7 @@ class PostSeeder extends Seeder
             ],
             [
                 'title'        => 'Usung Tema "Gembira Berkarya", FORTASI SMK MUDA Bawean Sambut Murid Baru dengan Penuh Semangat',
-                'content'      => '<p>smkmudabawean – Suasana ceria dan penuh energi positif menyelimuti lapangan utama SMK Muhammadiyah 4 (SMK MUDA) Sangkapura Bawean pada Senin pagi (13/07/2026). Seluruh warga sekolah berkumpul secara khidmat untuk mengikuti apel pembukaan Forum Ta\'aruf dan Orientasi Siswa Baru (FORTASI) Tahun Ajaran 2026/2027.</p><p>Apel akbar ini dihadiri langsung oleh Kepala Sekolah, seluruh jajaran guru and tenaga kependidikan, serta ratusan siswa baru yang tampak antusias menyambut hari pertama mereka. Tema "Gembira Berkarya" dipilih sebagai semangat penyambutan, mencerminkan harapan agar siswa baru dapat menemukan passion mereka dan berkarya dengan penuh kegembiraan selama menempuh pendidikan di SMK MUDA.</p>',
+                'content'      => '<p>smkmudabawean – Suasana ceria dan penuh energi positif menyelimuti lapangan utama SMK Muhammadiyah 4 (SMK MUDA) Sangkapura Bawean pada Senin pagi (13/07/2026). Seluruh warga sekolah berkumpul secara khidmat untuk mengikuti apel pembukaan Forum Ta\'aruf dan Orientasi Siswa Baru (FORTASI) Tahun Ajaran 2026/2027.</p><p>Apel akbar ini dihadiri langsung oleh Kepala Sekolah, seluruh jajaran guru and tenaga kependidikan, serta ratusan siswa baru yang tampak antusias menyambut hari pertama mereka. Tema "Gembira Berkarya" dipilih sebagai semangat penyambutan, mencerminkan harapan agar siswa baru dapat menemukan passion mereka and berkarya dengan penuh kegembiraan selama menempuh pendidikan di SMK MUDA.</p>',
                 'published_at' => '2026-07-13 07:00:00',
                 'category'     => 'Kegiatan Sekolah',
                 'thumbnail'    => 'images/artikel-fortasi.png',
@@ -39,7 +39,7 @@ class PostSeeder extends Seeder
                 'content'      => '<p>smkmudabawean – Memasuki masa libur panjang kenaikan kelas, aktivitas layanan administrasi di SMK Muhammadiyah 4 (SMK MUDA) Sangkapura Bawean dipastikan tetap berjalan normal. Sekolah yang terletak di Pulau Bawean ini berkomitmen penuh memfasilitasi para lulusan tingkat pertama yang ingin melanjutkan pendidikan vokasi melalui Sistem Penerimaan Murid Baru (SPMB) Tahun Ajaran 2026/2027.</p><p>Sesuai kalender akademik, libur panjang kenaikan kelas tidak serta-merta menghentikan proses layanan penerimaan siswa baru. Panitia SPMB tetap stand-by di kantor sekolah setiap hari kerja untuk menerima berkas pendaftaran, melayani konsultasi, dan menjawab pertanyaan calon peserta didik maupun orang tua.</p>',
                 'published_at' => '2026-06-25 08:00:00',
                 'category'     => 'Berita & Pengumuman',
-                'thumbnail'    => 'images/logo-smk.png',
+                'thumbnail'    => 'images/artikel-spmb.png',
             ],
             [
                 'title'        => 'Pemanfaatan Teknologi di Genggaman || SMK MUDA Bawean Sukses Gelar PSAT 2026 Berbasis Android',
@@ -53,7 +53,7 @@ class PostSeeder extends Seeder
                 'content'      => '<p>smkmudabawean – Komitmen untuk terus meningkatkan mutu pendidikan dan tata kelola kelembagaan kembali ditunjukkan oleh keluarga besar SMK Muhammadiyah 4 (SMK MUDA) Sangkapura Bawean. Pada hari Selasa, 19 Mei 2026, sekolah menyelenggarakan agenda penting berupa Pembinaan oleh Pengawas Sekolah SMK yang dipusatkan di Laboratorium Komputer sekolah.</p><p>Kegiatan strategis ini dihadiri langsung oleh Kepala Sekolah, seluruh dewan guru, dan tenaga kependidikan. Pengawas dari Cabang Dinas Pendidikan Gresik memaparkan berbagai aspek yang menjadi fokus pembinaan, mulai dari implementasi kurikulum Merdeka Belajar, penguatan manajemen sekolah, hingga strategi peningkatan kualitas pembelajaran berbasis kompetensi.</p>',
                 'published_at' => '2026-05-19 10:00:00',
                 'category'     => 'Berita & Pengumuman',
-                'thumbnail'    => 'images/logo-smk.png',
+                'thumbnail'    => 'images/artikel-pembinaan.png',
             ],
             [
                 'title'        => 'Jelajahi Daratan Gresik, Siswa TKR SMK MUDA Bawean Sukses Laksanakan Studi Banding "Siap Kerja Sebelum Lulus"',
@@ -67,7 +67,7 @@ class PostSeeder extends Seeder
                 'content'      => '<p>smkmudabawean – Geliat demokrasi mulai terasa di lingkungan SMK Muhammadiyah 4 (SMK MUDA) Sangkapura Bawean. Organisasi otonom Ikatan Pelajar Muhammadiyah (IPM) bersiap menyelenggarakan Musyawarah Ranting (Musyran) Ke-IX Tahun 2026 yang akan dilaksanakan pada 27 hingga 28 April 2026.</p><p>Agenda ini bukan sekadar pergantian pengurus, melainkan laboratorium nyata bagi siswa untuk belajar berdemokrasi sejak dini. Dengan mengusung tema besar yang mencerminkan semangat regenerasi kepemimpinan islami, Musyran kali ini diharapkan dapat melahirkan kader-kader muda IPM yang tangguh, amanah, dan berdedikasi tinggi untuk kemajuan organisasi dan sekolah.</p>',
                 'published_at' => '2026-04-25 08:00:00',
                 'category'     => 'Kegiatan Sekolah',
-                'thumbnail'    => 'images/logo-smk.png',
+                'thumbnail'    => 'images/artikel-ipm.png',
             ],
             [
                 'title'        => 'Semarak Hari Kartini di SMK MUDA Bawean || "Harmoni Warna Kartini" Warnai Jalanan Dusun Daun Barat',
@@ -88,7 +88,7 @@ class PostSeeder extends Seeder
                 'content'      => '<p>smkmudabawean – Suasana khidmat menyelimuti Pulau Bawean pada Jum\'at 20 March 2026 yang bertepatan 1 Syawal 1447 H, seiring dengan berkumandangnya takbir kemenangan. Keluarga besar SMK Muhammadiyah 4 (SMK MUDA) Sangkapura secara resmi menyampaikan ucapan selamat Idulfitri 1447 Hijriah melalui berbagai kanal informasi sekolah.</p><p>Pesan lebaran tahun ini dikemas dengan penuh ketulusan dan kehangatan, mencerminkan nilai-nilai Islam yang menjadi landasan pendidikan di SMK MUDA. Seluruh civitas akademika mengucapkan Minal Aidin Wal Faizin, mohon maaf lahir dan batin.</p>',
                 'published_at' => '2026-03-20 08:00:00',
                 'category'     => 'Berita & Pengumuman',
-                'thumbnail'    => 'images/logo-smk.png',
+                'thumbnail'    => 'images/artikel-idulfitri.png',
             ],
             [
                 'title'        => 'PSAJ 2026 || SMK MUDA Bawean Tegaskan Eksistensi Pendidikan Berbasis Digital di Pulau Bawean',
@@ -102,14 +102,14 @@ class PostSeeder extends Seeder
                 'content'      => '<p>smkmudabawean – Dalam rangka memperingati Milad ke-12 SMK Muhammadiyah 4 (SMK MUDA) Sangkapura Bawean, sekolah menggelar aksi sosial yang penuh makna dengan tema "Level Up 12". Sebanyak 140 paket sembako dibagikan kepada warga sekitar dan keluarga tidak mampu di sekitar lingkungan sekolah.</p><p>Kegiatan ini merupakan wujud nyata dari nilai-nilai islami yang selalu ditanamkan di SMK MUDA, bahwa kemajuan sekolah harus sejalan dengan kepedulian terhadap masyarakat sekitar. Para siswa dilibatkan langsung dalam proses persiapan hingga distribusi paket sembako sebagai bentuk pendidikan karakter sosial.</p>',
                 'published_at' => '2026-03-10 09:00:00',
                 'category'     => 'Kegiatan Sekolah',
-                'thumbnail'    => 'images/logo-smk.png',
+                'thumbnail'    => 'images/artikel-milad.png',
             ],
             [
                 'title'        => 'SMK Muhammadiyah 4 Sangkapura Gelar UKK 2026 || Cetak Lulusan Kompeten dan Siap Mental',
                 'content'      => '<p>smkmudabawean – Memasuki babak akhir masa studi, siswa kelas 12 SMK Muhammadiyah 4 (SMK MUDA) Sangkapura, Bawean menjalani Ujian Kompetensi Keahlian (UKK) sebagai ajang pembuktian skill sebelum melangkah ke dunia profesional.</p><p>Kegiatan ini berlangsung intensif selama tiga hari, mulai tanggal 11 hingga 13 Februari 2026. Tahun ini, dua jurusan unggulan, yaitu Teknik Kendaraan Ringan Otomotif (TKRO) dan Akuntansi dan Keuangan Lembaga (AKL), menampilkan kompetensi terbaik mereka di hadapan penguji dari industri dan lembaga sertifikasi profesi.</p>',
                 'published_at' => '2026-02-13 11:00:00',
                 'category'     => 'Akademik',
-                'thumbnail'    => 'images/logo-smk.png',
+                'thumbnail'    => 'images/artikel-ukk.png',
             ],
         ];
 

@@ -9,8 +9,8 @@
 
     <div class="mt-8 space-y-8">
         <div class="space-y-2">
-            <h1 class="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">Kabar & Berita</h1>
-            <p class="text-sm text-slate-400">Arsip berita dan publikasi kegiatan SMK Muda Bawean.</p>
+            <h1 class="text-3xl sm:text-5xl font-extrabold text-gray-900 tracking-tight">Kabar & Berita</h1>
+            <p class="text-sm text-gray-600">Arsip berita dan publikasi kegiatan SMK Muda Bawean.</p>
         </div>
 
         @if($posts->isEmpty())

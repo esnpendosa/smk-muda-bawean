@@ -9,7 +9,7 @@
         $slide1_bg_url = $slide1_bg ? (str_starts_with($slide1_bg, 'images/') ? asset($slide1_bg) : asset('storage/' . $slide1_bg)) : asset('images/artikel-ujian-digital.png');
 
         $slide2_bg = \App\Models\Setting::get('slider_slide2_bg');
-        $slide2_bg_url = $slide2_bg ? (str_starts_with($slide2_bg, 'images/') ? asset($slide2_bg) : asset('storage/' . $slide2_bg)) : asset('images/artikel-fortasi.png');
+        $slide2_bg_url = $slide2_bg ? (str_starts_with($slide2_bg, 'images/') ? asset($slide2_bg) : asset('storage/' . $slide2_bg)) : asset('images/artikel-ukk.png');
 
         $slide3_bg = \App\Models\Setting::get('slider_slide3_bg');
         $slide3_bg_url = $slide3_bg ? (str_starts_with($slide3_bg, 'images/') ? asset($slide3_bg) : asset('storage/' . $slide3_bg)) : asset('images/artikel-parenting-ai.png');

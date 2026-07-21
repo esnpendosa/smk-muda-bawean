@@ -7,28 +7,16 @@
     @include('components.seo-head', ['seo' => $seo ?? null])
     <link rel="icon" type="image/png" href="{{ asset('images/logo-smk.png') }}">
     <link rel="apple-touch-icon" href="{{ asset('images/logo-smk.png') }}">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <style type="text/tailwindcss">
+    <style>
         :root {
             --color-primary:   {{ theme_colors()['color_primary']   ?? '#16a34a' }};
             --color-secondary: {{ theme_colors()['color_secondary'] ?? '#15803d' }};
             --color-accent:    {{ theme_colors()['color_accent']    ?? '#bbf7d0' }};
         }
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
-        .nav-link { @apply px-3.5 py-2.5 rounded-xl text-sm font-semibold text-gray-600 hover:text-green-700 hover:bg-green-50 transition duration-200; }
-        .nav-active { @apply text-green-700 bg-green-50; }
-        .header-shadow { box-shadow: 0 1px 3px rgba(0,0,0,.08); }
     </style>
-    <script>
-        tailwind.config = {
-            theme: { extend: { colors: {
-                primary:   'var(--color-primary)',
-                secondary: 'var(--color-secondary)',
-                accent:    'var(--color-accent)',
-            }}}
-        }
-    </script>
 </head>
 <body class="h-full flex flex-col bg-gray-50 text-gray-800 selection:bg-green-100 selection:text-green-800">
 
@@ -219,7 +207,7 @@
             </div>
 
             <div class="border-t border-green-700 pt-8 flex items-center justify-center text-xs text-green-300">
-                <p>&copy; {{ date('Y') }} SMK Muhammadiyah 4 Sangkapura Bawean. Semua Hak Cipta Dilindungi.</p>
+                <p>&copy; {{ date('Y') }} SMK Muhammadiyah 4 Sangkapura Bawean. Developed by <a href="https://kangdigital.web.id" target="_blank" rel="noopener" class="hover:text-green-150 transition font-medium">Kang Digital</a>.</p>
             </div>
         </div>
     </footer>

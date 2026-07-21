@@ -23,5 +23,6 @@
 /vendor
 _ide_helper.php
 Homestead.json
-Homestead.yaml
 Thumbs.db
+article_detail.txt
+live_posts.json

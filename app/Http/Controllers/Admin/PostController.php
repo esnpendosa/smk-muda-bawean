@@ -20,10 +20,20 @@ class PostController extends Controller
     public function index(Request $request)
     {
         $query = Post::withTrashed()->with('author')->latest();
+        
         if ($request->filled('status')) {
             $query->where('status', $request->status);
         }
-        $posts = $query->paginate(15);
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', '%' . $search . '%')
+                  ->orWhere('content', 'like', '%' . $search . '%');
+            });
+        }
+
+        $posts = $query->paginate(15)->withQueryString();
         return view('admin.posts.index', compact('posts'));
     }
 
@@ -48,7 +58,7 @@ class PostController extends Controller
         if ($request->hasFile('thumbnail')) {
             $ext = $request->file('thumbnail')->getClientOriginalExtension();
             $thumbnailPath = $request->file('thumbnail')->storeAs(
-                'uploads', Str::uuid() . '.' . $ext, 'private'
+                'uploads', Str::uuid() . '.' . $ext, 'public'
             );
         }
 
@@ -94,10 +104,10 @@ class PostController extends Controller
         ]);
 
         if ($request->hasFile('thumbnail')) {
-            if ($post->thumbnail) Storage::disk('private')->delete($post->thumbnail);
+            if ($post->thumbnail) Storage::disk('public')->delete($post->thumbnail);
             $ext = $request->file('thumbnail')->getClientOriginalExtension();
             $validated['thumbnail'] = $request->file('thumbnail')->storeAs(
-                'uploads', Str::uuid() . '.' . $ext, 'private'
+                'uploads', Str::uuid() . '.' . $ext, 'public'
             );
         }
 

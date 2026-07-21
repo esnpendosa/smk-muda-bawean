@@ -7,8 +7,8 @@
     <title>Admin Panel - SMK Muda Bawean</title>
     <link rel="icon" type="image/png" href="{{ asset('images/logo-smk.png') }}">
     
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tailwind CSS -->
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">

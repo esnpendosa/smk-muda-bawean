@@ -66,3 +66,52 @@ Route::get('/faq', [FaqController::class, 'index'])->name('faq.index');
 // SEO
 Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
 Route::get('/robots.txt',  [SitemapController::class, 'robots'])->name('robots');
+
+// Utility route to fix storage symlink on shared hosting
+Route::get('/fix-storage', function () {
+    $storageLink = public_path('storage');
+    $msg = '';
+
+    if (file_exists($storageLink) || is_link($storageLink)) {
+        if (is_link($storageLink)) {
+            if (unlink($storageLink)) {
+                $msg .= "Deleted existing broken symlink. ";
+            } else {
+                $msg .= "Failed to delete existing symlink. ";
+            }
+        } else {
+            $newName = $storageLink . '_bak_' . time();
+            if (rename($storageLink, $newName)) {
+                $msg .= "Renamed existing directory to " . basename($newName) . ". ";
+            } else {
+                $msg .= "Failed to rename existing directory. ";
+            }
+        }
+    } else {
+        $msg .= "No existing storage link/directory found. ";
+    }
+
+    try {
+        app()->make('files')->link(
+            storage_path('app/public'), public_path('storage')
+        );
+        return $msg . "Storage link created successfully!";
+    } catch (\Exception $e) {
+        return $msg . "Error creating storage link: " . $e->getMessage() . 
+               ". If it failed, you can manually delete the 'public/storage' folder/link via your hosting file manager. The application will automatically use the fallback storage route to serve images.";
+    }
+});
+
+// Fallback storage route to serve images/files dynamically if symlink is broken or disabled
+Route::get('/storage/{path}', function ($path) {
+    $fullPath = storage_path('app/public/' . $path);
+    
+    if (!file_exists($fullPath) || is_dir($fullPath)) {
+        abort(404);
+    }
+    
+    $file = file_get_contents($fullPath);
+    $type = mime_content_type($fullPath);
+    
+    return response($file, 200)->header("Content-Type", $type);
+})->where('path', '.*');

@@ -23,7 +23,7 @@ class NewsPageTest extends TestCase
 
     public function test_news_index_returns_successful_response(): void
     {
-        Post::factory()->count(12)->create([
+        Post::factory()->count(18)->create([
             'status' => 'published',
             'published_at' => now()->subDay(),
             'author_id' => $this->author->id
