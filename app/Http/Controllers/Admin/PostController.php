@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Post;
 use App\Services\SlugService;
 use App\Services\HtmlSanitizerService;
+use App\Services\ImageProcessingService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -13,7 +14,8 @@ class PostController extends Controller
 {
     public function __construct(
         private SlugService $slugService,
-        private HtmlSanitizerService $sanitizer
+        private HtmlSanitizerService $sanitizer,
+        private ImageProcessingService $imageProcessor
     ) {}
 
     public function index(Request $request)
@@ -47,22 +49,18 @@ class PostController extends Controller
             'title'            => 'required|string|max:255',
             'content'          => 'required|string',
             'status'           => 'required|in:draft,published',
-            'thumbnail'        => 'nullable|file|mimes:jpg,jpeg,png,webp|max:2048',
+            'thumbnail'        => 'nullable|file|mimes:jpg,jpeg,png,webp|max:10240', // max 10MB, auto-compress
             'meta_title'       => 'nullable|string|max:60',
             'meta_description' => 'nullable|string|max:160',
             'published_at'     => 'nullable|date',
         ]);
 
-        // Simpan thumbnail langsung ke public/uploads/ agar tidak butuh symlink
+        // Auto-compress & resize thumbnail ke max 1200px, simpan ke public/uploads/
         $thumbnailPath = null;
         if ($request->hasFile('thumbnail')) {
-            $file     = $request->file('thumbnail');
-            $ext      = $file->getClientOriginalExtension();
-            $filename = Str::uuid() . '.' . $ext;
-            $dest     = public_path('uploads');
-            if (!is_dir($dest)) mkdir($dest, 0775, true);
-            $file->move($dest, $filename);
-            $thumbnailPath = 'uploads/' . $filename;
+            $thumbnailPath = $this->imageProcessor->process(
+                $request->file('thumbnail'), '', 1200, 82
+            );
         }
 
         Post::create([
@@ -100,7 +98,7 @@ class PostController extends Controller
             'title'            => 'required|string|max:255',
             'content'          => 'required|string',
             'status'           => 'required|in:draft,published',
-            'thumbnail'        => 'nullable|file|mimes:jpg,jpeg,png,webp|max:2048',
+            'thumbnail'        => 'nullable|file|mimes:jpg,jpeg,png,webp|max:10240', // max 10MB, auto-compress
             'meta_title'       => 'nullable|string|max:60',
             'meta_description' => 'nullable|string|max:160',
             'published_at'     => 'nullable|date',
@@ -112,14 +110,10 @@ class PostController extends Controller
                 $oldPath = public_path($post->thumbnail);
                 if (file_exists($oldPath)) @unlink($oldPath);
             }
-            // Simpan thumbnail baru langsung ke public/uploads/
-            $file     = $request->file('thumbnail');
-            $ext      = $file->getClientOriginalExtension();
-            $filename = Str::uuid() . '.' . $ext;
-            $dest     = public_path('uploads');
-            if (!is_dir($dest)) mkdir($dest, 0775, true);
-            $file->move($dest, $filename);
-            $validated['thumbnail'] = 'uploads/' . $filename;
+            // Auto-compress & resize thumbnail baru
+            $validated['thumbnail'] = $this->imageProcessor->process(
+                $request->file('thumbnail'), '', 1200, 82
+            );
         }
 
         $slug = $post->title !== $validated['title']

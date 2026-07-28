@@ -4,11 +4,15 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Teacher;
+use App\Services\ImageProcessingService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class TeacherController extends Controller
 {
+    public function __construct(
+        private ImageProcessingService $imageProcessor
+    ) {}
     public function index()
     {
         $teachers = Teacher::ordered()->paginate(20);
@@ -25,20 +29,16 @@ class TeacherController extends Controller
         $validated = $request->validate([
             'name'     => 'required|string|max:100',
             'position' => 'required|string|max:100',
-            'photo'    => 'nullable|file|mimes:jpg,jpeg,png,webp|max:2048',
+            'photo'    => 'nullable|file|mimes:jpg,jpeg,png,webp|max:10240',
             'order'    => 'nullable|integer|min:0',
         ]);
 
-        // Simpan langsung ke public/uploads/ agar tidak butuh symlink
+        // Auto-compress & resize foto pendidik ke max 600px lebar
         $photoPath = null;
         if ($request->hasFile('photo')) {
-            $file     = $request->file('photo');
-            $ext      = $file->getClientOriginalExtension();
-            $filename = Str::uuid() . '.' . $ext;
-            $dest     = public_path('uploads');
-            if (!is_dir($dest)) mkdir($dest, 0775, true);
-            $file->move($dest, $filename);
-            $photoPath = 'uploads/' . $filename;
+            $photoPath = $this->imageProcessor->process(
+                $request->file('photo'), '', 600, 85
+            );
         }
 
         Teacher::create([
@@ -69,24 +69,19 @@ class TeacherController extends Controller
         $validated = $request->validate([
             'name'     => 'required|string|max:100',
             'position' => 'required|string|max:100',
-            'photo'    => 'nullable|file|mimes:jpg,jpeg,png,webp|max:2048',
+            'photo'    => 'nullable|file|mimes:jpg,jpeg,png,webp|max:10240',
             'order'    => 'nullable|integer|min:0',
         ]);
 
         if ($request->hasFile('photo')) {
-            // Hapus foto lama jika ada dan bukan foto seeder
             if ($teacher->photo && str_starts_with($teacher->photo, 'uploads/')) {
                 $oldPath = public_path($teacher->photo);
                 if (file_exists($oldPath)) @unlink($oldPath);
             }
-            // Simpan foto baru ke public/uploads/
-            $file     = $request->file('photo');
-            $ext      = $file->getClientOriginalExtension();
-            $filename = Str::uuid() . '.' . $ext;
-            $dest     = public_path('uploads');
-            if (!is_dir($dest)) mkdir($dest, 0775, true);
-            $file->move($dest, $filename);
-            $validated['photo'] = 'uploads/' . $filename;
+            // Auto-compress & resize foto baru
+            $validated['photo'] = $this->imageProcessor->process(
+                $request->file('photo'), '', 600, 85
+            );
         }
 
         $teacher->update([
