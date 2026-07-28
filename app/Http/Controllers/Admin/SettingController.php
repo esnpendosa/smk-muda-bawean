@@ -88,17 +88,20 @@ class SettingController extends Controller
         for ($i = 1; $i <= 3; $i++) {
             $key = "slider_slide{$i}_bg";
             if ($request->hasFile($key)) {
-                // Delete old image if it exists
+                // Hapus gambar lama jika tersimpan di public/uploads/
                 $oldPath = Setting::get($key);
-                if ($oldPath && \Illuminate\Support\Facades\Storage::disk('public')->exists($oldPath)) {
-                    \Illuminate\Support\Facades\Storage::disk('public')->delete($oldPath);
+                if ($oldPath && str_starts_with($oldPath, 'uploads/')) {
+                    $oldFile = public_path($oldPath);
+                    if (file_exists($oldFile)) @unlink($oldFile);
                 }
-
-                $ext = $request->file($key)->getClientOriginalExtension();
-                $path = $request->file($key)->storeAs(
-                    'uploads', \Illuminate\Support\Str::uuid() . '.' . $ext, 'public'
-                );
-                Setting::set($key, $path);
+                // Simpan langsung ke public/uploads/ (tidak butuh symlink)
+                $file     = $request->file($key);
+                $ext      = $file->getClientOriginalExtension();
+                $filename = \Illuminate\Support\Str::uuid() . '.' . $ext;
+                $dest     = public_path('uploads');
+                if (!is_dir($dest)) mkdir($dest, 0775, true);
+                $file->move($dest, $filename);
+                Setting::set($key, 'uploads/' . $filename);
             }
         }
 

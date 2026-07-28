@@ -24,7 +24,13 @@
                     <div class="bg-white border border-gray-150 rounded-2xl overflow-hidden hover:border-green-200 transition duration-300 flex flex-col group shadow-sm">
                         <div class="aspect-[3/4] w-full overflow-hidden bg-gray-50 relative border-b border-gray-100">
                             @if($teacher->photo)
-                                <img src="{{ asset('storage/' . $teacher->photo) }}" 
+                                @php
+                                    // Support both old storage path and new public/uploads path
+                                    $photoUrl = str_starts_with($teacher->photo, 'uploads/')
+                                        ? asset($teacher->photo)
+                                        : asset('storage/' . $teacher->photo);
+                                @endphp
+                                <img src="{{ $photoUrl }}" 
                                      alt="Foto Pendidik: {{ $teacher->name }}" 
                                      loading="lazy" 
                                      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">

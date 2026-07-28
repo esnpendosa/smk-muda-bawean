@@ -5,14 +5,23 @@
 {{-- Dynamic Hero Slider --}}
 <section class="relative bg-gray-900 overflow-hidden" aria-label="Hero Slider">
     @php
+        // Helper: resolve setting image path to proper URL
+        // Support: images/ (seeder), uploads/ (new), storage/uploads/ (old symlink)
+        $resolveImg = function($val, $fallback) {
+            if (!$val) return asset($fallback);
+            if (str_starts_with($val, 'images/')) return asset($val);
+            if (str_starts_with($val, 'uploads/')) return asset($val);
+            return asset('storage/' . $val);
+        };
+
         $slide1_bg = \App\Models\Setting::get('slider_slide1_bg');
-        $slide1_bg_url = $slide1_bg ? (str_starts_with($slide1_bg, 'images/') ? asset($slide1_bg) : asset('storage/' . $slide1_bg)) : asset('images/artikel-ujian-digital.png');
+        $slide1_bg_url = $resolveImg($slide1_bg, 'images/artikel-ujian-digital.png');
 
         $slide2_bg = \App\Models\Setting::get('slider_slide2_bg');
-        $slide2_bg_url = $slide2_bg ? (str_starts_with($slide2_bg, 'images/') ? asset($slide2_bg) : asset('storage/' . $slide2_bg)) : asset('images/artikel-ukk.png');
+        $slide2_bg_url = $resolveImg($slide2_bg, 'images/artikel-ukk.png');
 
         $slide3_bg = \App\Models\Setting::get('slider_slide3_bg');
-        $slide3_bg_url = $slide3_bg ? (str_starts_with($slide3_bg, 'images/') ? asset($slide3_bg) : asset('storage/' . $slide3_bg)) : asset('images/artikel-parenting-ai.png');
+        $slide3_bg_url = $resolveImg($slide3_bg, 'images/artikel-parenting-ai.png');
     @endphp
     <!-- Slider Container -->
     <div id="hero-slider" class="relative h-[550px] sm:h-[600px] w-full overflow-hidden">

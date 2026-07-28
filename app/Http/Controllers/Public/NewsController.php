@@ -47,7 +47,7 @@ class NewsController extends Controller
         $seo = [
             'title' => $post->meta_title ?: $post->title,
             'description' => $post->meta_description ?: Str::limit(strip_tags($post->content), 155),
-            'og_image' => $post->thumbnail ? asset('storage/' . $post->thumbnail) : null,
+            'og_image' => $post->thumbnail_url,
         ];
 
         return view('public.berita.show', compact('post', 'schema', 'seo'));

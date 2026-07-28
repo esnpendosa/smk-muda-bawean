@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Teacher;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class TeacherController extends Controller
@@ -30,10 +29,16 @@ class TeacherController extends Controller
             'order'    => 'nullable|integer|min:0',
         ]);
 
+        // Simpan langsung ke public/uploads/ agar tidak butuh symlink
         $photoPath = null;
         if ($request->hasFile('photo')) {
-            $ext = $request->file('photo')->getClientOriginalExtension();
-            $photoPath = $request->file('photo')->storeAs('uploads', Str::uuid() . '.' . $ext, 'public');
+            $file     = $request->file('photo');
+            $ext      = $file->getClientOriginalExtension();
+            $filename = Str::uuid() . '.' . $ext;
+            $dest     = public_path('uploads');
+            if (!is_dir($dest)) mkdir($dest, 0775, true);
+            $file->move($dest, $filename);
+            $photoPath = 'uploads/' . $filename;
         }
 
         Teacher::create([
@@ -69,9 +74,19 @@ class TeacherController extends Controller
         ]);
 
         if ($request->hasFile('photo')) {
-            if ($teacher->photo) Storage::disk('public')->delete($teacher->photo);
-            $ext = $request->file('photo')->getClientOriginalExtension();
-            $validated['photo'] = $request->file('photo')->storeAs('uploads', Str::uuid() . '.' . $ext, 'public');
+            // Hapus foto lama jika ada dan bukan foto seeder
+            if ($teacher->photo && str_starts_with($teacher->photo, 'uploads/')) {
+                $oldPath = public_path($teacher->photo);
+                if (file_exists($oldPath)) @unlink($oldPath);
+            }
+            // Simpan foto baru ke public/uploads/
+            $file     = $request->file('photo');
+            $ext      = $file->getClientOriginalExtension();
+            $filename = Str::uuid() . '.' . $ext;
+            $dest     = public_path('uploads');
+            if (!is_dir($dest)) mkdir($dest, 0775, true);
+            $file->move($dest, $filename);
+            $validated['photo'] = 'uploads/' . $filename;
         }
 
         $teacher->update([
@@ -87,7 +102,11 @@ class TeacherController extends Controller
     public function destroy($id)
     {
         $teacher = Teacher::findOrFail($id);
-        if ($teacher->photo) Storage::disk('public')->delete($teacher->photo);
+        // Hapus foto jika tersimpan di public/uploads/
+        if ($teacher->photo && str_starts_with($teacher->photo, 'uploads/')) {
+            $oldPath = public_path($teacher->photo);
+            if (file_exists($oldPath)) @unlink($oldPath);
+        }
         $teacher->delete();
 
         return redirect()->route('admin.teachers.index')->with('success', 'Data pendidik berhasil dihapus.');
