@@ -57,18 +57,57 @@ class Post extends Model
 
     /**
      * Get the publicly accessible thumbnail URL.
-     * Handles both storage-based uploads and public/images/ assets.
+     * File uploads disimpan langsung di public/uploads/ oleh ImageProcessingService.
+     * Selalu return URL absolut dengan domain production.
      */
     public function getThumbnailUrlAttribute(): ?string
     {
         if (!$this->thumbnail) return null;
-        // Already a full URL (e.g. http/https)
-        if (str_starts_with($this->thumbnail, 'http')) return $this->thumbnail;
-        // Public images from seeder (images/xxx.png) — served directly from public/
-        if (str_starts_with($this->thumbnail, 'images/')) return asset($this->thumbnail);
-        // New uploads saved directly to public/uploads/ (no symlink needed)
-        if (str_starts_with($this->thumbnail, 'uploads/')) return asset($this->thumbnail);
-        // Legacy: old uploads via Storage::disk('public') symlink
-        return asset('storage/' . $this->thumbnail);
+
+        // Sudah full URL
+        if (str_starts_with($this->thumbnail, 'http')) {
+            return $this->ensureProductionUrl($this->thumbnail);
+        }
+
+        // Format upload baru: "uploads/uuid.jpg" → ada di public/uploads/
+        if (str_starts_with($this->thumbnail, 'uploads/')) {
+            return $this->ensureProductionUrl(asset($this->thumbnail));
+        }
+
+        // Gambar statis seeder: "images/xxx.png" → ada di public/images/
+        if (str_starts_with($this->thumbnail, 'images/')) {
+            return $this->ensureProductionUrl(asset($this->thumbnail));
+        }
+
+        // Legacy: path lain via storage symlink
+        return $this->ensureProductionUrl(asset('storage/' . $this->thumbnail));
+    }
+
+    /**
+     * Ganti domain localhost/lokal dengan domain production.
+     * Dibutuhkan karena APP_URL di lokal adalah http://localhost.
+     */
+    private function ensureProductionUrl(string $url): string
+    {
+        $production = 'https://smkmudabawean.sch.id';
+
+        // Fix trailing slash di APP_URL yang menyebabkan double slash
+        // e.g. "https://smkmudabawean.sch.id//uploads/..." → benar
+        $url = preg_replace('#(https?://[^/]+)//+#', '$1/', $url);
+
+        foreach ([
+            'http://localhost',
+            'https://localhost',
+            'http://127.0.0.1',
+            'https://127.0.0.1',
+            'http://smkmudabawean.test',
+            'https://smkmudabawean.test',
+        ] as $local) {
+            if (str_starts_with($url, $local)) {
+                return $production . '/' . ltrim(substr($url, strlen($local)), '/');
+            }
+        }
+
+        return $url;
     }
 }

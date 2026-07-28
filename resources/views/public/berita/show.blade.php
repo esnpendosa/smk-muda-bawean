@@ -40,7 +40,7 @@
         @endif
 
         <!-- Body Content -->
-        <div class="prose prose-green max-w-none text-gray-700 leading-relaxed text-base sm:text-lg space-y-6 relative z-10">
+        <div class="prose prose-green max-w-none text-gray-700 leading-relaxed text-base sm:text-lg space-y-6 relative z-10 [&>p]:text-justify [&>p]:hyphens-auto">
             {!! clean($post->content) !!}
         </div>
 

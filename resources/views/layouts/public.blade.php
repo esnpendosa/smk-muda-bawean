@@ -16,6 +16,23 @@
             --color-accent:    {{ theme_colors()['color_accent']    ?? '#bbf7d0' }};
         }
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
+
+        /* Justify konten artikel dari rich text editor */
+        .prose p {
+            text-align: justify;
+            hyphens: auto;
+            -webkit-hyphens: auto;
+            word-break: break-word;
+        }
+        /* Pastikan gambar di konten artikel tidak meluber */
+        .prose img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 0.75rem;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+        }
+        /* Ukuran thumbnail yang direkomendasikan: 1200x630px (rasio 1.91:1) untuk OG */
     </style>
 </head>
 <body class="h-full flex flex-col bg-gray-50 text-gray-800 selection:bg-green-100 selection:text-green-800">

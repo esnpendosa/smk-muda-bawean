@@ -1,4 +1,4 @@
-@extends('layouts.public')
+﻿@extends('layouts.public')
 
 @section('content')
 
@@ -15,13 +15,13 @@
         };
 
         $slide1_bg = \App\Models\Setting::get('slider_slide1_bg');
-        $slide1_bg_url = $resolveImg($slide1_bg, 'images/artikel-ujian-digital.png');
+        $slide1_bg_url = $resolveImg($slide1_bg, 'images/1.png');
 
         $slide2_bg = \App\Models\Setting::get('slider_slide2_bg');
-        $slide2_bg_url = $resolveImg($slide2_bg, 'images/artikel-ukk.png');
+        $slide2_bg_url = $resolveImg($slide2_bg, 'images/3.png');
 
         $slide3_bg = \App\Models\Setting::get('slider_slide3_bg');
-        $slide3_bg_url = $resolveImg($slide3_bg, 'images/artikel-parenting-ai.png');
+        $slide3_bg_url = $resolveImg($slide3_bg, 'images/2.png');
     @endphp
     <!-- Slider Container -->
     <div id="hero-slider" class="relative h-[550px] sm:h-[600px] w-full overflow-hidden">

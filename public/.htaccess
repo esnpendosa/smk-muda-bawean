@@ -1,8 +1,28 @@
 # Naikkan batas upload PHP agar bisa terima gambar hingga 10MB
+# Coba semua variant mod_php (shared hosting pakai versi berbeda-beda)
 <IfModule mod_php.c>
     php_value upload_max_filesize 10M
     php_value post_max_size 12M
     php_value memory_limit 128M
+    php_value max_execution_time 120
+</IfModule>
+<IfModule mod_php8.c>
+    php_value upload_max_filesize 10M
+    php_value post_max_size 12M
+    php_value memory_limit 128M
+    php_value max_execution_time 120
+</IfModule>
+<IfModule mod_php82.c>
+    php_value upload_max_filesize 10M
+    php_value post_max_size 12M
+    php_value memory_limit 128M
+    php_value max_execution_time 120
+</IfModule>
+<IfModule mod_php83.c>
+    php_value upload_max_filesize 10M
+    php_value post_max_size 12M
+    php_value memory_limit 128M
+    php_value max_execution_time 120
 </IfModule>
 
 <IfModule mod_rewrite.c>

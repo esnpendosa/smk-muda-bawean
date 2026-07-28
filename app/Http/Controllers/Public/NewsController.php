@@ -45,9 +45,12 @@ class NewsController extends Controller
         $schema = $this->schemaService->newsArticle($post);
 
         $seo = [
-            'title' => $post->meta_title ?: $post->title,
+            'title'       => $post->meta_title ?: $post->title,
             'description' => $post->meta_description ?: Str::limit(strip_tags($post->content), 155),
-            'og_image' => $post->thumbnail_url,
+            'og_image'    => $post->thumbnail_url,
+            'og_type'     => 'article',
+            'og_url'      => url()->current(),
+            'canonical'   => url()->current(),
         ];
 
         return view('public.berita.show', compact('post', 'schema', 'seo'));
