@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Admin\FaqController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\ImageUploadController;
 
 Route::name('admin.')->group(function () {
 
@@ -31,6 +32,9 @@ Route::name('admin.')->group(function () {
 
         // Berita
         Route::resource('posts', PostController::class);
+
+        // Upload gambar inline untuk editor Summernote
+        Route::post('upload-image', [ImageUploadController::class, 'store'])->name('upload-image');
 
         // Komentar
         Route::resource('comments', CommentController::class)->only(['index', 'update', 'destroy']);

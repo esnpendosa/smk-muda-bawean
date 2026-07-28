@@ -62,11 +62,13 @@ class Post extends Model
     public function getThumbnailUrlAttribute(): ?string
     {
         if (!$this->thumbnail) return null;
-        // Already a full URL
+        // Already a full URL (e.g. http/https)
         if (str_starts_with($this->thumbnail, 'http')) return $this->thumbnail;
-        // Public images (images/xxx.png) — served directly from public/
+        // Public images from seeder (images/xxx.png) — served directly from public/
         if (str_starts_with($this->thumbnail, 'images/')) return asset($this->thumbnail);
-        // Storage uploads (uploads/xxx.png)
+        // New uploads saved directly to public/uploads/ (no symlink needed)
+        if (str_starts_with($this->thumbnail, 'uploads/')) return asset($this->thumbnail);
+        // Legacy: old uploads via Storage::disk('public') symlink
         return asset('storage/' . $this->thumbnail);
     }
 }

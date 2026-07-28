@@ -7,7 +7,6 @@ use App\Models\Post;
 use App\Services\SlugService;
 use App\Services\HtmlSanitizerService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class PostController extends Controller
@@ -54,12 +53,16 @@ class PostController extends Controller
             'published_at'     => 'nullable|date',
         ]);
 
+        // Simpan thumbnail langsung ke public/uploads/ agar tidak butuh symlink
         $thumbnailPath = null;
         if ($request->hasFile('thumbnail')) {
-            $ext = $request->file('thumbnail')->getClientOriginalExtension();
-            $thumbnailPath = $request->file('thumbnail')->storeAs(
-                'uploads', Str::uuid() . '.' . $ext, 'public'
-            );
+            $file     = $request->file('thumbnail');
+            $ext      = $file->getClientOriginalExtension();
+            $filename = Str::uuid() . '.' . $ext;
+            $dest     = public_path('uploads');
+            if (!is_dir($dest)) mkdir($dest, 0775, true);
+            $file->move($dest, $filename);
+            $thumbnailPath = 'uploads/' . $filename;
         }
 
         Post::create([
@@ -104,11 +107,19 @@ class PostController extends Controller
         ]);
 
         if ($request->hasFile('thumbnail')) {
-            if ($post->thumbnail) Storage::disk('public')->delete($post->thumbnail);
-            $ext = $request->file('thumbnail')->getClientOriginalExtension();
-            $validated['thumbnail'] = $request->file('thumbnail')->storeAs(
-                'uploads', Str::uuid() . '.' . $ext, 'public'
-            );
+            // Hapus thumbnail lama jika ada dan bukan gambar statis seeder
+            if ($post->thumbnail && str_starts_with($post->thumbnail, 'uploads/')) {
+                $oldPath = public_path($post->thumbnail);
+                if (file_exists($oldPath)) @unlink($oldPath);
+            }
+            // Simpan thumbnail baru langsung ke public/uploads/
+            $file     = $request->file('thumbnail');
+            $ext      = $file->getClientOriginalExtension();
+            $filename = Str::uuid() . '.' . $ext;
+            $dest     = public_path('uploads');
+            if (!is_dir($dest)) mkdir($dest, 0775, true);
+            $file->move($dest, $filename);
+            $validated['thumbnail'] = 'uploads/' . $filename;
         }
 
         $slug = $post->title !== $validated['title']

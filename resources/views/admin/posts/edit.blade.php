@@ -146,8 +146,29 @@
                 ['view', ['fullscreen', 'codeview', 'help']]
             ],
             callbacks: {
-                onChange: function(contents, $editable) {
+                onChange: function(contents) {
                     $('#content-editor').val(contents);
+                },
+                onImageUpload: function(files) {
+                    // Upload gambar ke server, bukan base64
+                    var formData = new FormData();
+                    formData.append('file', files[0]);
+                    formData.append('_token', '{{ csrf_token() }}');
+
+                    $.ajax({
+                        url: '/admin/upload-image',
+                        method: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function(response) {
+                            // Sisipkan gambar dengan URL permanen dari server
+                            $('#content-editor').summernote('insertImage', response.url);
+                        },
+                        error: function() {
+                            alert('Gagal upload gambar. Pastikan ukuran file tidak lebih dari 5MB.');
+                        }
+                    });
                 }
             }
         });

@@ -102,16 +102,25 @@ Route::get('/fix-storage', function () {
     }
 });
 
-// Fallback storage route to serve images/files dynamically if symlink is broken or disabled
+// Fallback: serve /storage/uploads/** dari storage/app/public/ (jika symlink rusak di shared hosting)
 Route::get('/storage/{path}', function ($path) {
     $fullPath = storage_path('app/public/' . $path);
-    
-    if (!file_exists($fullPath) || is_dir($fullPath)) {
-        abort(404);
+    if (!file_exists($fullPath) || is_dir($fullPath)) abort(404);
+    return response()->file($fullPath);
+})->where('path', '.*');
+
+// Fallback: serve /uploads/** — thumbnail & gambar konten yang disimpan di storage/app/public/uploads/
+// Kompatibel dengan file lama (storage) maupun baru (public/uploads/)
+Route::get('/uploads/{path}', function ($path) {
+    // Coba dari public/uploads/ dulu (file baru)
+    $publicPath = public_path('uploads/' . $path);
+    if (file_exists($publicPath) && !is_dir($publicPath)) {
+        return response()->file($publicPath);
     }
-    
-    $file = file_get_contents($fullPath);
-    $type = mime_content_type($fullPath);
-    
-    return response($file, 200)->header("Content-Type", $type);
+    // Fallback ke storage/app/public/uploads/ (file lama)
+    $storagePath = storage_path('app/public/uploads/' . $path);
+    if (file_exists($storagePath) && !is_dir($storagePath)) {
+        return response()->file($storagePath);
+    }
+    abort(404);
 })->where('path', '.*');

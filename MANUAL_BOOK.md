@@ -9,11 +9,12 @@ Dokumen ini berisi panduan lengkap untuk Administrator dan Tim Teknis dalam meng
 1. [Spesifikasi Teknis](#1-spesifikasi-teknis)
 2. [Fitur Utama Sistem](#2-fitur-utama-sistem)
 3. [Panduan Instalasi & Pengaturan Awal](#3-panduan-instalasi--pengaturan-awal)
-4. [Panduan Manajemen Konten & Database](#4-panduan-manajemen-konten--database)
-5. [Sistem Komentar & Moderasi](#5-sistem-komentar--moderasi)
-6. [Pengaturan Tampilan & Hero Slider](#6-pengaturan-tampilan--hero-slider)
-7. [Panduan SEO & Favicon](#7-panduan-seo--favicon)
-8. [Panduan Git & Alur Sinkronisasi GitHub](#8-panduan-git--alur-sinkronisasi-github)
+4. [Panduan Menulis Berita (Lengkap + Gambar)](#4-panduan-menulis-berita-lengkap--gambar)
+5. [Panduan Manajemen Konten & Database](#5-panduan-manajemen-konten--database)
+6. [Sistem Komentar & Moderasi](#6-sistem-komentar--moderasi)
+7. [Pengaturan Tampilan & Hero Slider](#7-pengaturan-tampilan--hero-slider)
+8. [Panduan SEO & Favicon](#8-panduan-seo--favicon)
+9. [Panduan Git & Alur Sinkronisasi GitHub](#9-panduan-git--alur-sinkronisasi-github)
 
 ---
 
@@ -21,6 +22,7 @@ Dokumen ini berisi panduan lengkap untuk Administrator dan Tim Teknis dalam meng
 * **Framework**: Laravel 10.x / 11.x (PHP 8.2+)
 * **Database**: MySQL / MariaDB
 * **CSS Framework**: Tailwind CSS (via Play CDN & theme-configured variables)
+* **Editor Berita**: Summernote (WYSIWYG editor — mirip WordPress)
 * **Design Theme**: Consistent Green-Emerald Color Scheme (Branding Resmi SMK)
 * **SEO Engine**: Dynamic Schema Markup & Metadata Engine
 
@@ -33,6 +35,8 @@ Dokumen ini berisi panduan lengkap untuk Administrator dan Tim Teknis dalam meng
 * **Sistem Kelulusan Mandiri**: Fitur pencarian status kelulusan siswa menggunakan nomor peserta ujian dengan opsi cetak surat kelulusan PDF secara real-time.
 * **International Media-Style Comment System**: Sistem komentar berulir (threaded), AJAX-driven, dilengkapi fitur voting (upvote) serta moderasi terintegrasi di Admin Panel.
 * **Social Media Sharing Utility**: Tombol bagikan ke WhatsApp, Facebook, X (Twitter), dan opsi salin tautan artikel.
+* **Editor Berita WYSIWYG**: Editor berita seperti WordPress — bisa format teks, sisipkan gambar, tabel, video, dan lain-lain.
+* **Upload Gambar di Konten**: Gambar yang disisipkan di isi berita otomatis tersimpan di server dengan URL permanen.
 
 ---
 
@@ -102,7 +106,97 @@ Pastikan server Anda sudah terinstal:
 
 ---
 
-## 4. PANDUAN MANAJEMEN KONTEN & DATABASE
+## 4. PANDUAN MENULIS BERITA (LENGKAP + GAMBAR)
+
+Fitur penulisan berita telah ditingkatkan menjadi **editor WYSIWYG** (What You See Is What You Get) seperti WordPress, dilengkapi kemampuan upload gambar langsung ke server.
+
+### 4.1 Cara Membuat Berita Baru
+
+1. Login ke **Admin Panel**: `http://[domain-anda]/admin/login`
+2. Klik menu **Berita** di sidebar kiri
+3. Klik tombol **+ Tambah Berita**
+4. Isi formulir berikut:
+
+| Field | Keterangan |
+|-------|-----------|
+| **Judul** | Judul berita (wajib diisi) |
+| **Konten** | Isi berita — bisa format teks, gambar, tabel, dll. |
+| **Status** | `Draft` = tersimpan tapi tidak tampil | `Published` = tampil di website |
+| **Tanggal Publikasi** | Atur tanggal & jam tayang berita |
+| **Thumbnail** | Foto utama yang muncul di kartu berita (halaman daftar berita) |
+| **Meta Title** | Judul untuk SEO (maks. 60 karakter) |
+| **Meta Description** | Deskripsi untuk SEO & WhatsApp share (maks. 160 karakter) |
+
+---
+
+### 4.2 Cara Menyisipkan Gambar di Isi Berita
+
+> ⚠️ **Penting**: Ada **dua jenis gambar** di sistem berita:
+> - **Thumbnail** = foto kecil yang muncul di kartu/daftar berita (upload di field Thumbnail)
+> - **Gambar di Konten** = foto yang muncul di dalam isi artikel (sisipkan lewat editor)
+
+#### Langkah menyisipkan gambar di dalam isi berita:
+
+1. Klik area editor konten (kotak teks besar dengan toolbar di atasnya)
+2. Klik **ikon gambar** (🖼️) di toolbar editor — biasanya ada di baris toolbar bagian **Insert**
+3. Pilih **"Insert Image"**
+4. Klik **"Browse Server"** atau pilih tab **"Upload"**
+5. Klik **"Choose File"** → pilih foto dari komputer Anda
+6. Klik **"Upload"** atau **"Insert"**
+7. Gambar otomatis tersimpan di server dan muncul di editor ✅
+8. Anda bisa mengatur ukuran, posisi (kiri/tengah/kanan) gambar setelah disisipkan
+
+> 💡 **Tips**: Gambar yang disisipkan di editor tersimpan secara permanen di folder `storage/uploads/content/` di server. Gambar tidak akan hilang meski berita diedit ulang.
+
+---
+
+### 4.3 Toolbar Editor — Panduan Fitur
+
+Editor berita memiliki toolbar lengkap berikut:
+
+| Tombol | Fungsi |
+|--------|--------|
+| **B** | Tebal (Bold) |
+| **I** | Miring (Italic) |
+| **U** | Garis bawah (Underline) |
+| **Style** | Pilih gaya teks (Heading 1, Heading 2, Normal, dll.) |
+| **Color** | Warna teks & background teks |
+| **• –** | Daftar bullet / Daftar angka |
+| **≡** | Rata kiri / tengah / kanan / justify |
+| **Table** | Sisipkan tabel |
+| **🔗** | Sisipkan tautan/link |
+| **🖼️** | **Sisipkan gambar** (upload ke server) |
+| **▶️** | Sisipkan video (YouTube, dll.) |
+| **⛶** | Mode layar penuh |
+| **< >** | Mode kode HTML |
+
+---
+
+### 4.4 Cara Upload Thumbnail Berita
+
+Thumbnail adalah **foto kecil** yang tampil di kartu berita pada halaman daftar berita.
+
+1. Scroll ke bawah di formulir berita, temukan field **"Thumbnail"**
+2. Klik **"Choose File"** atau **"Pilih File"**
+3. Pilih foto dari komputer (format: JPG, PNG, WEBP — maks. 2MB)
+4. Klik **Simpan Berita**
+5. Thumbnail akan muncul otomatis di halaman daftar berita ✅
+
+> ⚠️ **Berita lama yang thumbnailnya tidak muncul**: Buka **Edit Berita** → upload ulang thumbnail → Simpan.
+
+---
+
+### 4.5 Tips Penulisan Berita yang Baik
+
+- **Judul**: Singkat, jelas, dan mengandung kata kunci utama (maks. 70 kata)
+- **Paragraf pertama**: Ringkasan berita — apa, siapa, kapan, di mana, mengapa
+- **Gambar**: Selalu tambahkan minimal 1 foto di dalam konten untuk menarik pembaca
+- **Thumbnail**: Wajib diisi agar kartu berita tidak tampil kosong
+- **Meta Description**: Isi dengan ringkasan menarik, akan muncul saat dibagikan ke WhatsApp
+
+---
+
+## 5. PANDUAN MANAJEMEN KONTEN & DATABASE
 
 ### Migrasi Artikel Berita (PostSeeder)
 Sistem memiliki 13 artikel berita historis bawaan dari WordPress yang telah dimigrasikan ke Laravel secara penuh menggunakan model Eloquent.
@@ -116,7 +210,7 @@ php artisan db:seed --class=PostSeeder
 
 ---
 
-## 5. SISTEM KOMENTAR & MODERASI
+## 6. SISTEM KOMENTAR & MODERASI
 
 Website dilengkapi fitur diskusi interaktif bergaya media internasional dengan spesifikasi berikut:
 * **Diskusi Berulir**: Mendukung balasan (replies) bersarang (nested) hingga **3 tingkat kedalaman** untuk percakapan yang rapi.
@@ -125,7 +219,7 @@ Website dilengkapi fitur diskusi interaktif bergaya media internasional dengan s
 * **Moderasi Admin**: Komentar yang dikirim pengunjung akan berstatus `pending` secara default sebelum disetujui (Approved) oleh administrator.
 
 ### Cara Memoderasi Komentar (Admin Panel):
-1. Masuk ke halaman Admin (`http://127.0.0.1:8000/admin/login`).
+1. Masuk ke halaman Admin (`http://[domain-anda]/admin/login`).
 2. Masukkan akun administrator Anda:
    * **Email**: `admin@smkmudabawean.sch.id`
    * **Password**: `Admin@12345!`
@@ -135,7 +229,7 @@ Website dilengkapi fitur diskusi interaktif bergaya media internasional dengan s
 
 ---
 
-## 6. PENGATURAN TAMPILAN & HERO SLIDER
+## 7. PENGATURAN TAMPILAN & HERO SLIDER
 
 Website menggunakan skema warna **Hijau Emerald** yang konsisten di semua bagian untuk mewakili identitas institusi pendidikan Muhammadiyah.
 
@@ -152,7 +246,7 @@ Konten teks, tautan tombol, dan gambar latar belakang slider halaman depan dapat
 
 ---
 
-## 7. PANDUAN SEO & FAVICON
+## 8. PANDUAN SEO & FAVICON
 
 Website dikonfigurasi agar optimal di hasil pencarian Google (SEO Friendly):
 
@@ -165,7 +259,7 @@ Website dikonfigurasi agar optimal di hasil pencarian Google (SEO Friendly):
 
 ---
 
-## 8. PANDUAN GIT & ALUR SINKRONISASI GITHUB
+## 9. PANDUAN GIT & ALUR SINKRONISASI GITHUB
 
 Proyek ini telah dikonfigurasi menggunakan kontrol versi Git dengan remote repositori yang mengarah ke:
 `https://github.com/esnpendosa/smk-muda-bawean.git`
@@ -199,9 +293,66 @@ Jika Anda melakukan perubahan kode secara lokal, jalankan perintah berikut secar
    ```bash
    git pull origin master
    php artisan migrate
-   php artisan db:seed --class=PostSeeder # Jika ada data artikel baru yang ingin diperbarui
    php artisan optimize:clear
    ```
 
 ---
+
+## 10. STRUKTUR FOLDER PENTING
+
+```
+smk-muda-bawean/
+├── app/
+│   ├── Http/Controllers/Admin/
+│   │   ├── PostController.php        ← Logika CRUD berita
+│   │   ├── ImageUploadController.php ← Upload gambar dari editor
+│   │   └── SettingController.php     ← Pengaturan website
+│   ├── Models/Post.php               ← Model berita
+│   └── Services/HtmlSanitizerService.php ← Filter keamanan konten HTML
+├── resources/views/
+│   ├── admin/posts/
+│   │   ├── create.blade.php          ← Form tambah berita
+│   │   └── edit.blade.php            ← Form edit berita
+│   └── public/berita/
+│       └── show.blade.php            ← Halaman detail berita (publik)
+├── storage/app/public/
+│   └── uploads/
+│       ├── [thumbnail].jpg           ← Foto thumbnail berita
+│       └── content/[gambar].jpg      ← Gambar di dalam isi berita
+└── public/
+    ├── images/                       ← Gambar statis (thumbnail seeder)
+    └── storage/                      ← Symlink ke storage/app/public
+```
+
+---
+
+## 11. TROUBLESHOOTING
+
+### Gambar tidak muncul setelah upload
+```bash
+# Pastikan symlink storage sudah ada
+php artisan storage:link
+
+# Pastikan folder uploads ada
+mkdir -p storage/app/public/uploads/content
+```
+
+### Halaman error setelah update kode
+```bash
+php artisan config:clear
+php artisan route:clear
+php artisan view:clear
+php artisan optimize:clear
+```
+
+### Login admin tidak bisa masuk
+```bash
+# Reset password admin (ganti email sesuai akun Anda)
+php artisan tinker
+>>> App\Models\User::where('email','admin@smkmudabawean.sch.id')->update(['password' => bcrypt('passwordbaru')])
+```
+
+---
+
 *Dokumentasi ini disusun oleh tim pengembang asisten AI Antigravity pada Juli 2026.*
+*Terakhir diperbarui: 28 Juli 2026 — Penambahan panduan upload gambar di editor berita.*
